@@ -1,24 +1,25 @@
 package com.aws.restjdbc.service;
 
 import com.aws.restjdbc.dto.PersonDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface PersonService {
     // List Person
-    List<PersonDto> listPerson();
+    ResponseEntity<List<PersonDto>> listPerson();
 
     // Get Person by id
-    PersonDto listPersonById(Long id);
+    ResponseEntity<PersonDto> listPersonById(int id);
 
     // create Person
-    PersonDto createPerson(PersonDto personDto);
+    ResponseEntity<PersonDto> createPerson(PersonDto personDto);
 
     // update Person
-    PersonDto updatePerson(Long id, PersonDto personDto);
+    ResponseEntity<PersonDto> updatePerson(int id, PersonDto personDto) throws IllegalArgumentException;
 
     // delete Person by id
-    String deletePersonById(Long id);
+    ResponseEntity<String> deletePersonById(int id) throws IllegalArgumentException;
 
     // delete Person by name
     String deletePersonByName(String name);

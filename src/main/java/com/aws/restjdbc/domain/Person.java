@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @Builder
 public class Person {
-    private long id;
+    private int id;
     private String name;
     private String lastname;
     private int age;
