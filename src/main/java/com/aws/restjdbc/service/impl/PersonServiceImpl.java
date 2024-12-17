@@ -2,6 +2,7 @@ package com.aws.restjdbc.service.impl;
 
 import com.aws.restjdbc.dto.PersonDto;
 import com.aws.restjdbc.exception.types.DataNotContentException;
+import com.aws.restjdbc.repository.PersonRepository;
 import com.aws.restjdbc.service.PersonService;
 import com.aws.restjdbc.util.MysqlConnection;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
     private final MysqlConnection mysqlConnection;
+    private final PersonRepository personRepository;
 
     @Override
     public ResponseEntity<List<PersonDto>> listPerson() throws SQLException {
@@ -44,25 +46,34 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public ResponseEntity<PersonDto> listPersonById(int id) throws SQLException {
+    public ResponseEntity<PersonDto> personById(int id) throws SQLException {
+        // Basic Validation Id
+        if (id <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        PersonDto person = new PersonDto();
         String sql = "select * from person where id = ?";
+
         try (Connection conn = this.mysqlConnection.getConnection();
              PreparedStatement pStmt = conn.prepareStatement(sql)) {
+
             pStmt.setInt(1, id);
-            ResultSet rs = pStmt.executeQuery();
-            if (rs.next()) {
-                PersonDto person = new PersonDto(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("lastname"),
-                        rs.getInt("age")
-                );
-                return ResponseEntity.status(HttpStatus.OK).body(person);
-            }
+
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (rs.next()) {
+                    person.setId(rs.getInt("id"));
+                    person.setNombre(rs.getString("name"));
+                    person.setApellido(rs.getString("lastname"));
+                    person.setEdad(rs.getInt("age"));
+                    return ResponseEntity.ok(person);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
         } catch (SQLException e) {
-            throw new SQLException(e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
         }
-        return null;
     }
 
     @Override
@@ -138,7 +149,7 @@ public class PersonServiceImpl implements PersonService {
                 }
                 pStmt.executeUpdate();
 
-                return this.listPersonById(id);
+                return this.personById(id);
             } catch (SQLException e) {
                 throw new RuntimeException("Error updating person with ID " + id, e);
             }
@@ -170,6 +181,31 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public String deletePersonByLastName(String lastName) {
         return "";
+    }
+
+    @Override
+    public List<PersonDto> findAllPerson() {
+        return personRepository.findAll();
+    }
+
+    @Override
+    public PersonDto findById(Integer id) {
+        return personRepository.findById(id);
+    }
+
+    @Override
+    public Integer save(PersonDto personDto) {
+        return personRepository.save(personDto);
+    }
+
+    @Override
+    public Integer update(Integer id, PersonDto personDto) {
+        return personRepository.update(id, personDto);
+    }
+
+    @Override
+    public Integer deleteById(Integer id) {
+        return personRepository.deleteById(id);
     }
 
     public boolean existPersonById(int id) throws SQLException {

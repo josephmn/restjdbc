@@ -11,7 +11,7 @@ public interface PersonService {
     ResponseEntity<List<PersonDto>> listPerson() throws SQLException;
 
     // Get Person by id
-    ResponseEntity<PersonDto> listPersonById(int id) throws SQLException;
+    ResponseEntity<PersonDto> personById(int id) throws SQLException;
 
     // create Person
     ResponseEntity<PersonDto> createPerson(PersonDto personDto) throws SQLException;
@@ -27,4 +27,14 @@ public interface PersonService {
 
     // delete Person by lastName
     String deletePersonByLastName(String lastName);
+
+    List<PersonDto> findAllPerson();
+
+    PersonDto findById(Integer id);
+
+    Integer save(PersonDto personDto);
+
+    Integer update(Integer id, PersonDto personDto);
+
+    Integer deleteById(Integer id);
 }

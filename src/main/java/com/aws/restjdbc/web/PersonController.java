@@ -22,8 +22,8 @@ public class PersonController {
     };
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonDto> listPersonById(@PathVariable(value = "id") int id) throws SQLException {
-        return this.personService.listPersonById(id);
+    public ResponseEntity<PersonDto> personById(@PathVariable(value = "id") int id) throws SQLException {
+        return this.personService.personById(id);
     };
 
     @PostMapping
