@@ -7,7 +7,7 @@ import java.util.List;
 public interface PersonRepository {
     List<PersonDto> findAll();
     PersonDto findById(Integer id);
-    Integer save(PersonDto person);
-    Integer update(Integer id, PersonDto person);
+    PersonDto save(PersonDto person);
+    PersonDto update(Integer id, PersonDto person);
     Integer deleteById(Integer id);
 }

@@ -27,14 +27,4 @@ public interface PersonService {
 
     // delete Person by lastName
     String deletePersonByLastName(String lastName);
-
-    List<PersonDto> findAllPerson();
-
-    PersonDto findById(Integer id);
-
-    Integer save(PersonDto personDto);
-
-    Integer update(Integer id, PersonDto personDto);
-
-    Integer deleteById(Integer id);
 }

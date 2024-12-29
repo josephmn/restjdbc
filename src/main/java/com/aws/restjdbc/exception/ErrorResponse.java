@@ -1,6 +1,5 @@
 package com.aws.restjdbc.exception;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

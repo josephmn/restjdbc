@@ -1,7 +1,7 @@
 package com.aws.restjdbc.web;
 
 import com.aws.restjdbc.dto.PersonDto;
-import com.aws.restjdbc.service.PersonService;
+import com.aws.restjdbc.service.PersonServiceJdbc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonJdbcTemplateController {
 
-    private final PersonService personService;
+    private final PersonServiceJdbc personService;
 
     @GetMapping()
     public ResponseEntity<List<PersonDto>> findAll() {
@@ -27,12 +27,12 @@ public class PersonJdbcTemplateController {
     };
 
     @PostMapping()
-    public ResponseEntity<Integer> save(@RequestBody PersonDto personDto) {
+    public ResponseEntity<PersonDto> save(@RequestBody PersonDto personDto) {
         return ResponseEntity.status(201).body(personService.save(personDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Integer> save(@PathVariable Integer id, @RequestBody PersonDto personDto) {
+    public ResponseEntity<PersonDto> save(@PathVariable Integer id, @RequestBody PersonDto personDto) {
         return ResponseEntity.ok(personService.update(id, personDto));
     }
 

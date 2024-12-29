@@ -2,7 +2,6 @@ package com.aws.restjdbc.service.impl;
 
 import com.aws.restjdbc.dto.PersonDto;
 import com.aws.restjdbc.exception.types.DataNotContentException;
-import com.aws.restjdbc.repository.PersonRepository;
 import com.aws.restjdbc.service.PersonService;
 import com.aws.restjdbc.util.MysqlConnection;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
     private final MysqlConnection mysqlConnection;
-    private final PersonRepository personRepository;
 
     @Override
     public ResponseEntity<List<PersonDto>> listPerson() throws SQLException {
@@ -181,31 +179,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public String deletePersonByLastName(String lastName) {
         return "";
-    }
-
-    @Override
-    public List<PersonDto> findAllPerson() {
-        return personRepository.findAll();
-    }
-
-    @Override
-    public PersonDto findById(Integer id) {
-        return personRepository.findById(id);
-    }
-
-    @Override
-    public Integer save(PersonDto personDto) {
-        return personRepository.save(personDto);
-    }
-
-    @Override
-    public Integer update(Integer id, PersonDto personDto) {
-        return personRepository.update(id, personDto);
-    }
-
-    @Override
-    public Integer deleteById(Integer id) {
-        return personRepository.deleteById(id);
     }
 
     public boolean existPersonById(int id) throws SQLException {
