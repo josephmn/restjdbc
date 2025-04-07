@@ -1,24 +1,5 @@
 package com.aws.restjdbc.service.impl;
 
-import com.aws.restjdbc.dto.PersonDto;
-import com.aws.restjdbc.exception.types.DataNotContentException;
-import com.aws.restjdbc.exception.types.IllegalArgumentException;
-import com.aws.restjdbc.util.MysqlConnection;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.sql.*;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 class PersonServiceImplTest {
 //
 //    @InjectMocks

@@ -1,22 +1,5 @@
 package com.aws.restjdbc.web;
 
-import com.aws.restjdbc.dto.PersonDto;
-import com.aws.restjdbc.service.PersonService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 class PersonControllerTest {
 
 //    @InjectMocks
