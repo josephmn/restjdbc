@@ -1,17 +1,21 @@
 package com.aws.restjdbc.service;
 
-import com.aws.restjdbc.dto.PersonDto;
+import com.aws.restjdbc.dto.PersonResponseDto;
+import com.aws.restjdbc.dto.RequestDto;
+import com.aws.restjdbc.dto.ResponseDto;
 
 import java.util.List;
 
 public interface PersonService {
-    List<PersonDto> findAllPerson();
+    List<PersonResponseDto> findAllPerson();
 
-    PersonDto findById(Integer id);
+    PersonResponseDto findById(Integer id);
 
-    PersonDto save(PersonDto personDto);
+    List<PersonResponseDto> findByName(String name);
 
-    PersonDto update(Integer id, PersonDto personDto);
+    PersonResponseDto save(RequestDto requestDto);
+
+    PersonResponseDto update(Integer id, RequestDto requestDto);
 
     Integer deleteById(Integer id);
 }

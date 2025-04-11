@@ -1,6 +1,7 @@
 package com.aws.restjdbc.service.impl;
 
-import com.aws.restjdbc.dto.PersonDto;
+import com.aws.restjdbc.dto.PersonResponseDto;
+import com.aws.restjdbc.dto.RequestDto;
 import com.aws.restjdbc.repository.PersonRepository;
 import com.aws.restjdbc.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -15,23 +16,28 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    public List<PersonDto> findAllPerson() {
+    public List<PersonResponseDto> findAllPerson() {
         return personRepository.findAll();
     }
 
     @Override
-    public PersonDto findById(Integer id) {
+    public PersonResponseDto findById(Integer id) {
         return personRepository.findById(id);
     }
 
     @Override
-    public PersonDto save(PersonDto personDto) {
-        return personRepository.save(personDto);
+    public List<PersonResponseDto> findByName(String name) {
+        return personRepository.findByName(name);
     }
 
     @Override
-    public PersonDto update(Integer id, PersonDto personDto) {
-        return personRepository.update(id, personDto);
+    public PersonResponseDto save(RequestDto requestDto) {
+        return personRepository.save(requestDto);
+    }
+
+    @Override
+    public PersonResponseDto update(Integer id, RequestDto requestDto) {
+        return personRepository.update(id, requestDto);
     }
 
     @Override

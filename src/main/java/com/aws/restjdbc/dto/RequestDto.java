@@ -7,8 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class PersonDto {
-    private int id;
+public class RequestDto {
     private String nombre;
     private String apellido;
     private int edad;
