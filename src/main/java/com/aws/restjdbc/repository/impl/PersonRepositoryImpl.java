@@ -134,9 +134,9 @@ public class PersonRepositoryImpl implements PersonRepository {
         return jdbcTemplate.execute(
                 (Connection con) -> {
                     try (CallableStatement cs = con.prepareCall("{call person_ins(?, ?, ?)}")) {
-                        cs.setString(1, person.getNombre());
-                        cs.setString(2, person.getApellido());
-                        cs.setInt(3, person.getEdad());
+                        cs.setString(1, person.getName());
+                        cs.setString(2, person.getLastname());
+                        cs.setInt(3, person.getAge());
                         try (ResultSet rs = cs.executeQuery()) {
                             if (rs.next()) {
                                 return PersonResponseDto.builder()
@@ -168,9 +168,9 @@ public class PersonRepositoryImpl implements PersonRepository {
                 (Connection con) -> {
                     try (CallableStatement cs = con.prepareCall("{call person_upd(?, ?, ?, ?)}")) {
                         cs.setInt(1, id);
-                        cs.setString(2, person.getNombre());
-                        cs.setString(3, person.getApellido());
-                        cs.setInt(4, person.getEdad());
+                        cs.setString(2, person.getName());
+                        cs.setString(3, person.getLastname());
+                        cs.setInt(4, person.getAge());
                         try (ResultSet rs = cs.executeQuery()) {
                             if (rs.next()) {
                                 return PersonResponseDto.builder()

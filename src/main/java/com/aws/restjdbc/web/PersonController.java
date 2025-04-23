@@ -5,6 +5,7 @@ import com.aws.restjdbc.dto.RequestDto;
 import com.aws.restjdbc.dto.ResponseDto;
 import com.aws.restjdbc.service.PersonService;
 import com.aws.restjdbc.util.PersonMapper;
+import com.aws.restjdbc.util.ValidateObject;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PersonController {
 
     private final PersonService personService;
+    private final ValidateObject validateObject;
 
     @GetMapping()
     public ResponseEntity<ResponseDto> findAll() {
@@ -43,7 +45,8 @@ public class PersonController {
     };
 
     @PostMapping()
-    public ResponseEntity<ResponseDto> save(@RequestBody RequestDto requestDto) {
+    public ResponseEntity<ResponseDto> save(@RequestBody String jsonString) {
+        RequestDto requestDto = validateObject.validRequestBody(jsonString, RequestDto.class);
         PersonResponseDto personDto = personService.save(requestDto);
         return ResponseEntity.ok().body(PersonMapper.buildResponse(String.valueOf(HttpStatus.CREATED.value()),
                 "Creación exitosa", personDto));
@@ -53,7 +56,7 @@ public class PersonController {
     public ResponseEntity<ResponseDto> save(@PathVariable Integer id, @RequestBody RequestDto requestDto) {
         PersonResponseDto personDto = personService.update(id, requestDto);
         return ResponseEntity.ok().body(PersonMapper.buildResponse(String.valueOf(HttpStatus.OK.value()),
-                "Creación exitosa", personDto));
+                "Actualización exitosa", personDto));
     }
 
     @DeleteMapping("/{id}")
