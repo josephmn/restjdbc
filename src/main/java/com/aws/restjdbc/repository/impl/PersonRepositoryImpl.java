@@ -5,7 +5,9 @@ import com.aws.restjdbc.dto.RequestDto;
 import com.aws.restjdbc.exception.types.DataNotFoundException;
 import com.aws.restjdbc.exception.types.DataPersistenceException;
 import com.aws.restjdbc.repository.PersonRepository;
+import com.aws.restjdbc.util.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class PersonRepositoryImpl implements PersonRepository {
@@ -27,6 +30,7 @@ public class PersonRepositoryImpl implements PersonRepository {
         } catch (DataAccessException e) {
             throw new DataNotFoundException("No data available for the requested query");
         }*/
+        log.info("Repository findAll - ini");
         return jdbcTemplate.execute(
                 (Connection con) -> {
                     try (CallableStatement cs = con.prepareCall("{call person_all()}")) {
@@ -41,7 +45,17 @@ public class PersonRepositoryImpl implements PersonRepository {
                                         .build();
                                 requestDto.add(person);
                             }
+                            log.info("requestDto findAll count: {}", requestDto.size());
+
+                            if (requestDto.size() == 0) {
+                                log.info("No data available for the requested query");
+                                throw new DataNotFoundException("No data available for the requested query");
+                            }
+                            log.info("Repository findAll - end");
                             return requestDto;
+                        } catch (SQLException ex) {
+                            log.error("SQLException Repository findAll: {}", ex.getMessage());
+                            throw new SQLException(Constants.MSG_SQL_EXCEPTION, ex);
                         }
                     }
                 }
@@ -56,12 +70,15 @@ public class PersonRepositoryImpl implements PersonRepository {
         } catch (Exception e) {
             throw new DataNotFoundException("Person with id: " + id + " not found");
         }*/
+        log.info("Repository findById - ini");
         return jdbcTemplate.execute(
                 (Connection con) -> {
                     try (CallableStatement cs = con.prepareCall("{call person_sel(?)}")) {
                         cs.setInt(1, id);
                         try (ResultSet rs = cs.executeQuery()) {
                             if (rs.next()) {
+                                log.info("Person found with id: {}", id);
+                                log.info("Repository findById - end");
                                 return PersonResponseDto.builder()
                                         .id(rs.getInt("id"))
                                         .nombre(rs.getString("name"))
@@ -69,8 +86,12 @@ public class PersonRepositoryImpl implements PersonRepository {
                                         .edad(rs.getInt("age"))
                                         .build();
                             } else {
+                                log.info("Person not found with id: {}", id);
                                 throw new DataNotFoundException("Person with id: " + id + " not found");
                             }
+                        } catch (SQLException ex) {
+                            log.error("SQLException Repository findById: {}", ex.getMessage());
+                            throw new SQLException(Constants.MSG_SQL_EXCEPTION, ex);
                         }
                     }
                 }
@@ -79,6 +100,7 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
     public List<PersonResponseDto> findByName(String name) {
+        log.info("Repository findByName - ini");
         return jdbcTemplate.execute(
                 (Connection con) -> {
                     try (CallableStatement cs = con.prepareCall("{call person_sel_name(?)}")) {
@@ -94,10 +116,18 @@ public class PersonRepositoryImpl implements PersonRepository {
                                         .build();
                                 requestDto.add(person);
                             }
+
+                            if (requestDto.size() == 0) {
+                                log.info("Person not found with name: {}", name);
+                                throw new DataNotFoundException("Person with name: " + name + " not found");
+                            }
+                            log.info("requestDto findByName count: {}", requestDto.size());
+                            log.info("Repository findByName - end");
                             return requestDto;
-                        } catch (SQLException e) {
-                            throw new DataNotFoundException("Person with name: " + name + " not found");
                         }
+                    } catch (SQLException ex) {
+                        log.error("SQLException Repository findByName: {}", ex.getMessage());
+                        throw new SQLException(Constants.MSG_SQL_EXCEPTION, ex);
                     }
                 }
         );
@@ -149,6 +179,8 @@ public class PersonRepositoryImpl implements PersonRepository {
                                 throw new DataPersistenceException("Failed to save person to the database");
                             }
                         }
+                    } catch (SQLException ex) {
+                        throw new SQLException(Constants.MSG_SQL_EXCEPTION, ex);
                     }
                 }
         );
@@ -183,6 +215,8 @@ public class PersonRepositoryImpl implements PersonRepository {
                                 throw new DataPersistenceException("Failed to update person in the database");
                             }
                         }
+                    } catch (SQLException ex) {
+                        throw new SQLException(Constants.MSG_SQL_EXCEPTION, ex);
                     }
                 }
         );
@@ -202,6 +236,8 @@ public class PersonRepositoryImpl implements PersonRepository {
                     try (CallableStatement cs = con.prepareCall("{call person_del(?)}")) {
                         cs.setInt(1, id);
                         return cs.executeUpdate();
+                    } catch (SQLException ex) {
+                        throw new SQLException("Error in DataBase SQL Query", ex);
                     }
                 }
         );

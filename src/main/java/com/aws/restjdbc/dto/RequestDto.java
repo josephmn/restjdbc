@@ -6,7 +6,8 @@ import com.aws.restjdbc.util.ValidationRegexp;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 public class RequestDto extends StrictObject {
 
     @NotBlank(message = "Name cannot be blank")

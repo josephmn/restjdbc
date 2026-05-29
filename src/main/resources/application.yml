@@ -1,0 +1,56 @@
+server:
+  port: '8091'
+spring:
+  application:
+    name: restjdbc
+    version: "@project.version@"
+  profiles:
+    active: dev
+## CONFIG FOR SQL SERVER ## INIT
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://192.168.18.25:1433;databaseName=crudjdbc;encrypt=true;trustServerCertificate=true;
+    url: jdbc:sqlserver://localhost:1433;databaseName=crudjdbc;encrypt=true;trustServerCertificate=true;
+    username: <tu_user>
+    password: <tu_password>
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServerDialect
+#      ddl-auto: update
+#    show-sql: true
+## CONFIG FOR SQL SERVER ## END
+  output:
+    ansi:
+      enabled: ALWAYS
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,loggers
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+
+## CONFIG FOR POSTGRESQL ## INIT
+## CONFIG FOR POSTGRESQL ## END
+
+## CONFIG FOR MYSQL ## INIT
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/crudjdbc;
+#    username: root
+#    password: password
+#  sql:
+#    init:
+#      mode: always
+## CONFIG FOR MYSQL ## END

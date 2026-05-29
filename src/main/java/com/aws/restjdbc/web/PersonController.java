@@ -8,6 +8,7 @@ import com.aws.restjdbc.util.PersonMapper;
 import com.aws.restjdbc.util.ValidateObject;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/api/v1/jdbcTemplate")
 @RequiredArgsConstructor
@@ -25,10 +27,12 @@ public class PersonController {
 
     @GetMapping()
     public ResponseEntity<ResponseDto> findAll() {
+        log.info("method findAll - ini");
         List<PersonResponseDto> personDto = personService.findAllPerson();
+        log.info("method findAll - end");
         return ResponseEntity.ok().body(PersonMapper.buildResponse(String.valueOf(HttpStatus.OK.value()),
                 "Consulta exitosa", personDto));
-    };
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> findById(@PathVariable Integer id) {
